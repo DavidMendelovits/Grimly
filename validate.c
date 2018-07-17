@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:17:46 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/07/17 13:26:29 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/07/17 16:02:19 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int     validate_line(char **tmp, t_mapkeys *map_keys)
         if (tmp[i] != (*map_keys).entr || tmp[i] != (*map_keys).exit ||
             tmp[i] != (*map_keys).path || tmp[i] != (*map_keys).fill ||
             tmp[i] != (*map_keys).empty)
-            return (-1);
+            return (0);
+		i++;
     }
     return (1);
 }
@@ -73,12 +74,13 @@ int		validate_map_keys(int fd, t_mapkeys *map_keys)
 	char	*tmp;
 
 	if (get_next_line(fd, &tmp) == -1)
-        return (-1);
+        return (0);
 //	printf("map_keys: %s\n", tmp);
     make_mapkeys(map_keys, tmp);
     while (get_next_line(fd, &tmp) == 1)
     {
-        validate_line(&tmp, map_keys);
+        if (!validate_line(&tmp, map_keys))
+			return (0);
         printf("tmp: %s\n", tmp);
     }
 	free(tmp);

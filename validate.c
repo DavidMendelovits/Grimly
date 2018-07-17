@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:17:46 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/07/16 23:26:16 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/07/17 13:26:29 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int     validate(int fd)
 {
 	int			i;
 	int			j;
-	t_mapkeys	*map_keys;
+	t_mapkeys	map_keys;
 	char		*line;
 	char		*tmp;
 
@@ -26,7 +26,7 @@ int     validate(int fd)
 	return (1);
 }
 
-int     make_mapkeys(t_mapkeys **map_keys, char *keys)
+int     make_mapkeys(t_mapkeys *map_keys, char *keys)
 {
     int     i;
 //    char    *map_height;
@@ -36,13 +36,16 @@ int     make_mapkeys(t_mapkeys **map_keys, char *keys)
     i = ft_strlen(keys) - 1;
     map_width = (char*)malloc(sizeof(char) * (i - 5));
     printf("keys: %s\n", keys);
-    printf("key[i]: %c\n", keys[i]);
-    (*map_keys)->exit = &keys[i--];
-    printf("key[i]: %c\n", keys[i]);
-    (*map_keys)->entr = &keys[i--];
-    (*map_keys)->path = &keys[i--];
-    (*map_keys)->empty = &keys[i--];
-    (*map_keys)->fill = &keys[i--];
+    printf("exit: %c\n", keys[i]);
+    map_keys->exit = &keys[i--];
+	printf("entr: %c\n", keys[i]);
+    map_keys->entr = &keys[i--];
+	printf("path: %c\n", keys[i]);
+    map_keys->path = &keys[i--];
+	printf("empty: %c\n", keys[i]);
+    map_keys->empty = &keys[i--];
+	printf("fill: %c\n", keys[i]);
+    map_keys->fill = &keys[i--];
     while (keys[i] != 'x')
     {
        *map_width++ = keys[i--];
@@ -50,22 +53,22 @@ int     make_mapkeys(t_mapkeys **map_keys, char *keys)
     *map_width = '\0';
     return (1);
 }
-int     validate_line(char **tmp, t_mapkeys **map_keys)
+int     validate_line(char **tmp, t_mapkeys *map_keys)
 {
     int     i;
 
     i = 0;
     while (i <= ft_strlen(*tmp))
     {
-        if (tmp[i] != (*map_keys)->entr || tmp[i] != (*map_keys)->exit ||
-            tmp[i] != (*map_keys)->path || tmp[i] != (*map_keys)->fill ||
-            tmp[i] != (*map_keys)->empty)
+        if (tmp[i] != (*map_keys).entr || tmp[i] != (*map_keys).exit ||
+            tmp[i] != (*map_keys).path || tmp[i] != (*map_keys).fill ||
+            tmp[i] != (*map_keys).empty)
             return (-1);
     }
     return (1);
 }
 
-int		validate_map_keys(int fd, t_mapkeys **map_keys)
+int		validate_map_keys(int fd, t_mapkeys *map_keys)
 {
 	char	*tmp;
 

@@ -39,6 +39,7 @@ typedef struct	s_node
 	struct s_node	*north;
 	struct s_node	*south;
 	int		        path_to_source;
+    struct s_node   *path2source;
 	int		        distance;
 }               t_node;
 
@@ -60,6 +61,5 @@ int     validate_line(char *tmp, t_mapkeys *map_keys);
 int		validate_char(char c, t_mapkeys *map_keys);
 int     make_mapkeys(t_mapkeys *map_keys, char *keys);
 int		get_mapsize(t_mapsize *dimensions, char *tmp);
-char	*f_strncpy(char *dest, char *src, size_t n);
 
 #endif

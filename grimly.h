@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:11:42 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/07/17 13:07:32 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/07/18 18:00:12 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ typedef struct  s_mapsize
 
 typedef struct  s_mapkeys
 {
-    char            *entr;
-    char            *exit;
-    char            *path;
-    char            *empty;
-    char            *fill;
+    char            entr;
+    char            exit;
+    char            path;
+    char            empty;
+    char            fill;
 }               t_mapkeys;
 
 typedef struct	s_node
@@ -56,6 +56,10 @@ typedef struct	s_exit
 
 int		validate(int fd);
 int		validate_map_keys(int fd, t_mapkeys *map_keys);
-int     validate_line(char **tmp, t_mapkeys *map_keys);
+int     validate_line(char *tmp, t_mapkeys *map_keys);
+int		validate_char(char c, t_mapkeys *map_keys);
 int     make_mapkeys(t_mapkeys *map_keys, char *keys);
+int		get_mapsize(t_mapsize *dimensions, char *tmp);
+char	*f_strncpy(char *dest, char *src, size_t n);
+
 #endif

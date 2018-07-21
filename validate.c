@@ -66,6 +66,7 @@ int     make_mapkeys(t_mapkeys *map_keys, char *keys)
 
 /*Checks first line and inits mapkeys*/
 int		validate_map_keys(int fd, t_mapkeys *map_keys, char ***map)
+char	*f_strncpy(char *dest, char *src, size_t n);
 {
     char		*tmp;
 	t_mapsize	map_dimensions;
@@ -78,7 +79,7 @@ int		validate_map_keys(int fd, t_mapkeys *map_keys, char ***map)
     {
         if (!validate_line(tmp, map_keys))
 			return (0);
-        printf("tmp: %s\n", tmp);
+//        printf("tmp: %s\n", tmp);
         if (ft_strlen(tmp) > map_dimensions.x)
             return (0);
 		if (!build_map(map_dimensions, tmp, map_keys))

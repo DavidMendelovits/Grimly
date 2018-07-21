@@ -50,18 +50,41 @@ int		get_mapsize(t_mapsize *dimensions, char *tmp)
 int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys)
 {
 	int				x;
+    int             i;
 	t_graph			graph[dim.y][dim.x];
+    char            map[dim.y][dim.x];
 	static int  	y = 0;
 
 	x = 0;
-	while (x < dim.x)
-	{
+    i = 0;
 
-	}
-	if (y != 0)
-	{
-
-	}
+    while (i < dim.x)
+    {
+        map[y][x] = tmp[i++];
+        ft_putchar(map[y][x++]);
+    }
+    y++;
+    ft_putchar('\n');
+    if (y == dim.y)
+    {
+        y = 0;
+        while (y < dim.y)
+        {
+            x = 0;
+            while (x < dim.x)
+                ft_putchar(map[y][x++]);
+            ft_putchar('\n');
+            y++;
+        }
+    }
+//	while (x < dim.x)
+//	{
+//        
+//	}
+//	if (y != 0)
+//	{
+//
+//	}
 //	while (i < dim.x)
 //		**(map++) = tmp[i++];
 	return (1);

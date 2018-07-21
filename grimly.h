@@ -76,6 +76,6 @@ int     validate_line(char *tmp, t_mapkeys *map_keys);
 int		validate_char(char c, t_mapkeys *map_keys);
 int     make_mapkeys(t_mapkeys *map_keys, char *keys);
 int		get_mapsize(t_mapsize *dimensions, char *tmp);
-int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys, char ***map);
+int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys);
 
 #endif

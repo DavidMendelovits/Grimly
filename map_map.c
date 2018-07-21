@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 15:14:34 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/07/18 20:12:06 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/07/20 18:06:14 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,16 @@ int		get_mapsize(t_mapsize *dimensions, char *tmp)
 	int		j;
 	int		k;
 
-
 	i = 0;
 	while (tmp[i] != 'x')
 		i++;
 	_len = (char*)malloc(sizeof(char) * (i + 1));
 	printf("tmp: %s\n", tmp);
-//	printf("variables passed to f_strncpy: _len: %s[%i] tmp: %s i: %i\n", _len, (i + 1), tmp, i); 
 	copy_until(&_len, tmp, 'x');
 	printf("_len: %s\n", _len);
 	i = ft_strlen(tmp) - ft_strlen(_len) - 6;
 	_wid = (char*)malloc(sizeof(char) * (i + 1));
 	i = ft_strlen(tmp) - 5;
-
 	j = ft_strlen(_len) + 1;
 	k = -1;
 	printf("i: %i\n", i);
@@ -50,22 +47,23 @@ int		get_mapsize(t_mapsize *dimensions, char *tmp)
 	return (1);
 }
 
-char	*f_strncpy(char *dest, char *src, size_t n)
+int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys)
 {
-	size_t	i;
+	int				x;
+	t_graph			graph[dim.y][dim.x];
+	static int  	y = 0;
 
-	i = 0;
-	while (i < n && src[i] != '\0')
+	x = 0;
+	while (x < dim.x)
 	{
-		dest[i] = src[i];
-		i++;
+
 	}
-	while (i < n)
+	if (y != 0)
 	{
-		dest[i] = '\0';
-		i++;
+
 	}
-	return (dest);
+//	while (i < dim.x)
+//		**(map++) = tmp[i++];
+	return (1);
 }
-
 

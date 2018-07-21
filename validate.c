@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:17:46 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/07/18 18:00:11 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/07/20 18:06:31 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int     make_mapkeys(t_mapkeys *map_keys, char *keys)
 }
 
 /*Checks first line and inits mapkeys*/
-int		validate_map_keys(int fd, t_mapkeys *map_keys)
+int		validate_map_keys(int fd, t_mapkeys *map_keys, char ***map)
 {
     char		*tmp;
 	t_mapsize	map_dimensions;
@@ -81,20 +81,24 @@ int		validate_map_keys(int fd, t_mapkeys *map_keys)
         printf("tmp: %s\n", tmp);
         if (ft_strlen(tmp) > map_dimensions.x)
             return (0);
-    }
+		if (!build_map(map_dimensions, tmp, map_keys))
+    		return (0);
+	}
 	free(tmp);
 	return (1);
 }
 
-int     validate(int fd) /*Base function*/
+/*Base function*/
+int     validate(int fd)
 {
 	int			i;
 	int			j;
+	char		**map;
 	t_mapkeys	map_keys;
 	char		*line;
 	char		*tmp;
 
-	if (!validate_map_keys(fd, &map_keys))
+	if (!validate_map_keys(fd, &map_keys, &map))
 		return (0);
 	return (1);
 }

@@ -32,20 +32,22 @@ typedef struct  s_mapkeys
     char            fill;
 }               t_mapkeys;
 
-typedef struct	s_vertex
+typedef struct	s_node
 {
-	int				path;
-	int				distance;
-	struct s_vertex **children;
-	struct s_vertex *parent;
-}				t_vertex;
+    int             visited:1;
+	int             x;
+    int             y;
+    int				step;
+    char            from;
+    struct s_node   *next;
+}				t_node;
 
-typedef struct	s_graph
+typedef struct  s_queue
 {
-	int				num_vertices;
-	struct s_vertex **graph;
-}				t_graph;
-	
+    t_node          *front;
+    t_node          *rear;
+}               t_queue;
+
 /* on hold
 typedef struct	s_node
 {

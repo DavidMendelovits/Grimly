@@ -51,7 +51,7 @@ int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys)
 {
 	int				x;
     int             i;
-	t_graph			graph[dim.y][dim.x];
+	char		    graph[dim.y][dim.x];
     char            map[dim.y][dim.x];
 	static int  	y = 0;
 
@@ -77,6 +77,7 @@ int		build_map(t_mapsize dim, char *tmp, t_mapkeys *keys)
             y++;
         }
     }
+    make_adj_list(&graph, keys, map);
 //	while (x < dim.x)
 //	{
 //        

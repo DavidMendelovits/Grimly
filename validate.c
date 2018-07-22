@@ -28,7 +28,10 @@ int		validate_char(char c, t_mapkeys *map_keys)
 	return (0);
 }
 
-/*validate each character in each line against keys*/
+/*
+** validate each character in each line against keys
+*/
+
 int     validate_line(char *tmp, t_mapkeys *map_keys)
 {
     int     i;
@@ -43,7 +46,10 @@ int     validate_line(char *tmp, t_mapkeys *map_keys)
     return (1);
 }
 
-/*reads from first line of map backwards and stores keys)*/
+/*
+** reads from first line of map backwards and stores key
+*/
+
 int     make_mapkeys(t_mapkeys *map_keys, char *keys)
 {
 	int     i;
@@ -64,9 +70,11 @@ int     make_mapkeys(t_mapkeys *map_keys, char *keys)
     return (1);
 }
 
-/*Checks first line and inits mapkeys*/
+/*
+** Checks first line and inits mapkeys
+*/
+
 int		validate_map_keys(int fd, t_mapkeys *map_keys, char ***map)
-char	*f_strncpy(char *dest, char *src, size_t n);
 {
     char		*tmp;
 	t_mapsize	map_dimensions;
@@ -89,7 +97,9 @@ char	*f_strncpy(char *dest, char *src, size_t n);
 	return (1);
 }
 
-/*Base function*/
+/*
+** Base function
+*/
 int     validate(int fd)
 {
 	int			i;

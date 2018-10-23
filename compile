@@ -1,1 +1,0 @@
-gcc -g get_next_line.c main.c validate.c map_map.c libft/libft.a

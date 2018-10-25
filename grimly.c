@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/25 12:47:15 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/25 14:44:02 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,13 +292,47 @@ void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
 {
 	WOW();
 	t_coordinate			*path;
+	t_coordinate			*tmp;
 
 	path = end;
+	tmp = malloc(sizeof(*tmp));
 	while ((*map)->map[path->row][path->column] != legend->start)
 	{
 		if (path->row > 0 && path->row < legend->height && path->column > 0 && path->column < legend->width)
 		{
-
+			if (path->row > 0 && (*map)->distances[path->row - 1][path->column] > 0)
+			{
+				tmp->row = path->row - 1;
+				tmp->column = path->column;
+			}
+			if (path->column > 0
+					&&(*map)->distances[path->row][path->column - 1] > 0
+				   	&& (*map)->distances[path->row][path->column - 1] < (*map)->distances[tmp->row][tmp->column])
+			{
+				tmp->row = path->row;
+				tmp->column = path->column - 1;
+			}
+			if (path->column < legend->width - 1
+					&& (*map)->distances[path->row][path->column + 1] > 0
+					&& (*map)->distances[path->row][path->column + 1] < (*map)->distances[tmp->row][tmp->column])
+			{
+				tmp->row = path->row;
+				tmp->column = path->column + 1;
+			}
+			if (path->row < legend->height - 1 
+					&& (*map)->distances[path->row + 1][path->column] > 0
+				    && (*map)->distances[path->row + 1][path->column] < (*map)->distances[tmp->row][tmp->column])
+			{
+				tmp->row = path->row + 1;
+				tmp->column = path->column;
+			}
+		}
+		free(path);
+		path = malloc(sizeof(t_coordinate));
+		ft_memcpy(path, tmp, sizeof(tmp));
+		if ((*map)->map[path->row][path->column] != legend->start)
+		{
+			(*map)->map[path->row][path->column] = legend->path;
 		}
 	}
 }
@@ -316,8 +350,9 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			parent = pop(queue);
 			if ((*map)->map[parent->row][parent->column] == l->end)
 			{
+				print_matrix((*map)->distances, l->height, l->width);
 				trace_path(parent, map, l);
-				print_matrix((*map)->matrix);
+				print_strings((*map)->map, 0);
 				break ;
 			}	
 			printf("1\n");

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/25 12:00:12 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/25 12:47:15 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,65 +288,92 @@ void			*pop(t_list **head)
 	return (data);
 }
 
+void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
+{
+	WOW();
+	t_coordinate			*path;
+
+	path = end;
+	while ((*map)->map[path->row][path->column] != legend->start)
+	{
+		if (path->row > 0 && path->row < legend->height && path->column > 0 && path->column < legend->width)
+		{
+
+		}
+	}
+}
+
 void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
 	WOW();
 	t_coordinate			*parent;
 	t_coordinate			tmp;
 
-	if (*queue && (*queue)->data)
+	while (*queue)
 	{
-		parent = pop(queue);	
-		printf("1\n");
-	}
-	if (parent->row >= 0 && parent->row < l->height
-		&& parent->column >= 0 && parent->column < l->width)
-	{
-		printf("hmm\n");
-		if (parent->row > 0 && !(*map)->distances[parent->row - 1][parent->column]
+		if (*queue && (*queue)->data)
+		{
+			parent = pop(queue);
+			if ((*map)->map[parent->row][parent->column] == l->end)
+			{
+				trace_path(parent, map, l);
+				print_matrix((*map)->matrix);
+				break ;
+			}	
+			printf("1\n");
+		}
+		if (parent->row >= 0 && parent->row < l->height
+			&& parent->column >= 0 && parent->column < l->width)
+		{
+			printf("hmm\n");
+			if (parent->row > 0 && !(*map)->distances[parent->row - 1][parent->column]
 							&& (*map)->map[parent->row - 1][parent->column] != l->full)
-		{
-			tmp.row = parent->row - 1;
-			tmp.column = parent->column;
-			write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-			push_back(queue, &tmp, sizeof(tmp));
-			print_coordinates(*queue);
-		}
-		if (parent->column > 0 && !(*map)->distances[parent->row][parent->column - 1]
-								&& (*map)->map[parent->row][parent->column - 1] != l->full)
-		{
-			tmp.row = parent->row;
-			tmp.column = parent->column - 1;
-			write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-			push_back(queue, &tmp, sizeof(tmp));
-			print_coordinates(*queue);
-		}
-		if (parent->row < l->height - 1 && !(*map)->distances[parent->row + 1][parent->column]
-						&& (*map)->map[parent->row + 1][parent->column ] != l->full)
-		{
-			printf("y\n");
-			tmp.row = parent->row + 1;
-			tmp.column = parent->column;
-			write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-			push_back(queue, &tmp, sizeof(tmp));
-			print_coordinates(*queue);
-		}
-		if (parent->column < l->width - 1&& !(*map)->distances[parent->row][parent->column + 1]
-						&& (*map)->map[parent->row][parent->column + 1] != l->full)
-		{
-			tmp.row = parent->row;
-			tmp.column = parent->column + 1;
-			write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-			push_back(queue, &tmp, sizeof(tmp));
-			print_coordinates(*queue);
-		}
+			{
+				tmp.row = parent->row - 1;
+				tmp.column = parent->column;
+				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
+				push_back(queue, &tmp, sizeof(tmp));
+				print_coordinates(*queue);
+			}
+			if (parent->column > 0 && !(*map)->distances[parent->row][parent->column - 1]
+									&& (*map)->map[parent->row][parent->column - 1] != l->full)
+			{
+				tmp.row = parent->row;
+				tmp.column = parent->column - 1;
+				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
+				push_back(queue, &tmp, sizeof(tmp));
+				print_coordinates(*queue);
+			}
+			if (parent->row < l->height - 1 && !(*map)->distances[parent->row + 1][parent->column]
+							&& (*map)->map[parent->row + 1][parent->column ] != l->full)
+			{
+				printf("y\n");
+				tmp.row = parent->row + 1;
+				tmp.column = parent->column;
+				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
+				push_back(queue, &tmp, sizeof(tmp));
+				print_coordinates(*queue);
+			}
+			if (parent->column < l->width - 1&& !(*map)->distances[parent->row][parent->column + 1]
+							&& (*map)->map[parent->row][parent->column + 1] != l->full)
+			{
+				tmp.row = parent->row;
+				tmp.column = parent->column + 1;
+				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
+				push_back(queue, &tmp, sizeof(tmp));
+				print_coordinates(*queue);
+			}
 //			print_matrix((*map)->distances, l->height, l->width);
 //			print_matrix((*map)->visited, l->height, l->width);
+		}
 	}
-	if (*queue && (*queue)->data)
-	{
-		check_neighbors(queue, map, l);
-	}
+//	if (*queue && (*queue)->data)
+//	{
+//		check_neighbors(queue, map, l);
+//	}
+//	
+			print_matrix((*map)->distances, l->height, l->width);
+			print_matrix((*map)->visited, l->height, l->width);
 }
 
 int				bfs(t_map **map, t_legend *legend)

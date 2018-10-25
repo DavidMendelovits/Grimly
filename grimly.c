@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/25 08:56:36 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/25 12:00:12 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int				validate_line(char *line, t_legend *legend)
 	p = -1;
 	while (line[++p])
 	{
-		printf("|%c|\n", line[p]);
+	//	printf("|%c|\n", line[p]);
 		if (line[p] == legend->full || line[p] == legend->empty
 		|| line[p] == legend->start || line[p] == legend->end)
 		{
@@ -340,8 +340,8 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			push_back(queue, &tmp, sizeof(tmp));
 			print_coordinates(*queue);
 		}
-			print_matrix((*map)->distances, l->height, l->width);
-			print_matrix((*map)->visited, l->height, l->width);
+//			print_matrix((*map)->distances, l->height, l->width);
+//			print_matrix((*map)->visited, l->height, l->width);
 	}
 	if (*queue && (*queue)->data)
 	{

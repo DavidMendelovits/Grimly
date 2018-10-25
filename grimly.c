@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/24 20:58:55 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/25 08:56:36 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ t_map			*read_map(t_legend *legend, int fd)
 	lines = 0;
 	map = (t_map *)malloc(sizeof(*map));
 	map->map = (char **)malloc(sizeof(char *) * (legend->height + 1));
-	while (get_next_line(fd, &line) == 1)
+	while (get_next_line(fd, &line) == 1 && lines < legend->height)
 	{
 		printf("len = %d\n", ft_strlen(line));
 		printf("width = %u\n", legend->width);
@@ -152,6 +152,7 @@ t_map			*read_map(t_legend *legend, int fd)
 		}
 		extract_line(&map, line, legend);
 		lines += 1;
+		printf("line num = %d\n", lines);
 		free(line);
 		line = NULL;
 	}
@@ -210,6 +211,7 @@ void			print_coordinate(t_coordinate *point)
 
 void			push(t_list **head, void *new_data, size_t size)
 {
+	WOW();
 	t_list			*new;
 
 	new = (t_list *)malloc(sizeof(*new));
@@ -218,10 +220,12 @@ void			push(t_list **head, void *new_data, size_t size)
 	new->size = size;
 	if (!(*head))
 	{
+		printf("2\n");
 		new->next = NULL;
 	}
 	else
 	{
+		printf("1\n");
 		new->next = *head;
 	}
 	*head = new;
@@ -241,6 +245,7 @@ void			push_back(t_list **head, void *new_data, size_t size)
 	if (!(*head))
 	{
 		*head = new;
+		return ;
 	}
 	while (tmp->next != NULL)
 	{
@@ -258,6 +263,7 @@ void			write_distance(t_coordinate *point, t_map **map, t_legend *l, int i)
 
 void			print_coordinates(t_list *queue)
 {
+	WOW();
 	if (queue && queue->data)
 	{
 		print_coordinate(queue->data);
@@ -268,6 +274,20 @@ void			print_coordinates(t_list *queue)
 	}
 }
 
+void			*pop(t_list **head)
+{
+	void					*data;
+	t_list					*new;
+
+	data = malloc((*head)->size);
+	ft_memcpy(data, (*head)->data, (*head)->size);
+	new = (*head)->next;
+	free((*head)->data);
+	free(*head);
+	*head = new;
+	return (data);
+}
+
 void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
 	WOW();
@@ -276,13 +296,14 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 
 	if (*queue && (*queue)->data)
 	{
-		parent = (*queue)->data;		
+		parent = pop(queue);	
+		printf("1\n");
 	}
 	if (parent->row >= 0 && parent->row < l->height
 		&& parent->column >= 0 && parent->column < l->width)
 	{
 		printf("hmm\n");
-		if (parent->row > 0 && !(*map)->visited[parent->row - 1][parent->column]
+		if (parent->row > 0 && !(*map)->distances[parent->row - 1][parent->column]
 							&& (*map)->map[parent->row - 1][parent->column] != l->full)
 		{
 			tmp.row = parent->row - 1;
@@ -291,7 +312,7 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			push_back(queue, &tmp, sizeof(tmp));
 			print_coordinates(*queue);
 		}
-		if (parent->column > 0 && !(*map)->visited[parent->row][parent->column - 1]
+		if (parent->column > 0 && !(*map)->distances[parent->row][parent->column - 1]
 								&& (*map)->map[parent->row][parent->column - 1] != l->full)
 		{
 			tmp.row = parent->row;
@@ -300,7 +321,7 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			push_back(queue, &tmp, sizeof(tmp));
 			print_coordinates(*queue);
 		}
-		if (parent->row < l->height - 1 && !(*map)->visited[parent->row + 1][parent->column]
+		if (parent->row < l->height - 1 && !(*map)->distances[parent->row + 1][parent->column]
 						&& (*map)->map[parent->row + 1][parent->column ] != l->full)
 		{
 			printf("y\n");
@@ -310,7 +331,7 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			push_back(queue, &tmp, sizeof(tmp));
 			print_coordinates(*queue);
 		}
-		if (parent->column < l->width - 1&& !(*map)->visited[parent->row][parent->column + 1]
+		if (parent->column < l->width - 1&& !(*map)->distances[parent->row][parent->column + 1]
 						&& (*map)->map[parent->row][parent->column + 1] != l->full)
 		{
 			tmp.row = parent->row;
@@ -322,6 +343,10 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			print_matrix((*map)->distances, l->height, l->width);
 			print_matrix((*map)->visited, l->height, l->width);
 	}
+	if (*queue && (*queue)->data)
+	{
+		check_neighbors(queue, map, l);
+	}
 }
 
 int				bfs(t_map **map, t_legend *legend)
@@ -330,6 +355,7 @@ int				bfs(t_map **map, t_legend *legend)
 	t_list			*stack;
 
 	tmp = *map;
+	stack = NULL;
 	push(&stack, tmp->start, sizeof(tmp->start));
 	print_coordinate(stack->data);
 	write_distance(stack->data, map, legend, 1);

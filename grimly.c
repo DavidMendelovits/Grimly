@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/25 14:44:02 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/25 17:08:48 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,6 @@ void			push_back(t_list **head, void *new_data, size_t size)
 void			write_distance(t_coordinate *point, t_map **map, t_legend *l, int i)
 {
 	(*map)->distances[point->row][point->column] = i;
-	(*map)->visited[point->row][point->column] = 1;
 }
 
 void			print_coordinates(t_list *queue)
@@ -337,12 +336,89 @@ void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
 	}
 }
 
+int				is_inbounds(int row, int column, t_legend *l)
+{
+	if (row >= 0 && row < l->height && column >= 0 && column < l->width)
+	{
+		return (1);
+	}
+	return (0);
+
+}
+
+int				is_empty(int row, int column, t_map **map, t_legend *l)
+{
+	if (!(*map)->distances[row][column] && (*map)->map[row][column] != l->full)
+	{
+		return (1);
+	}
+	return (0);
+}
+
+t_coordinate			write_neighbor(t_coordinate *parent, t_map **map, t_legend *l, int dir)
+{
+	WOW();
+	t_coordinate			tmp;
+
+	if (dir == UP)
+		printf("up\n");
+	if (dir == DOWN)
+		printf("down\n");
+	if (dir == LEFT)
+		printf("left\n");
+	if (dir == RIGHT)
+		printf("right\n");
+	if (dir == UP || dir == DOWN)
+		tmp.row = (dir == UP) ? parent->row - 1 : parent->row + 1;
+	else
+		tmp.row = parent->row;
+	if (dir == LEFT || dir == RIGHT)
+		tmp.column = (dir == LEFT) ? parent->column - 1 : parent->column + 1;
+	else
+		tmp.column = parent->column;
+	printf("[%d][%d]\n", tmp.row, tmp.column);
+	write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
+	return (tmp);
+}
+
+
+void			queue_neighbors(t_list **queue, t_map **map, t_legend *l, t_coordinate *p)
+{
+	WOW();
+	t_coordinate			tmp;
+
+	if (is_inbounds(p->row, p->column, l))
+	{
+		if (is_inbounds(p->row - 1, p->column, l) && is_empty(p->row - 1, p->column, map, l))
+		{
+			tmp = write_neighbor(p, map, l, UP);
+			push_back(queue, &tmp, sizeof(tmp));
+		}
+		if (is_inbounds(p->row, p->column - 1, l) && is_empty(p->row, p->column - 1, map, l))
+		{
+			tmp = write_neighbor(p, map, l, LEFT);
+			push_back(queue, &tmp, sizeof(tmp));
+		}
+		if (is_inbounds(p->row + 1, p->column, l) && is_empty(p->row + 1, p->column, map, l))
+		{
+			tmp = write_neighbor(p, map, l, DOWN);
+			push_back(queue, &tmp, sizeof(tmp));
+		}
+		if (is_inbounds(p->row, p->column + 1, l) && is_empty(p->row, p->column + 1, map, l))
+		{
+			tmp = write_neighbor(p, map, l, RIGHT);
+			push_back(queue, &tmp, sizeof(tmp));
+		}
+	}
+}
+
 void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
 	WOW();
 	t_coordinate			*parent;
 	t_coordinate			tmp;
 
+//			print_matrix((*map)->distances, l->height, l->width);
 	while (*queue)
 	{
 		if (*queue && (*queue)->data)
@@ -355,60 +431,16 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 				print_strings((*map)->map, 0);
 				break ;
 			}	
-			printf("1\n");
+	//		printf("1\n");
 		}
-		if (parent->row >= 0 && parent->row < l->height
-			&& parent->column >= 0 && parent->column < l->width)
-		{
-			printf("hmm\n");
-			if (parent->row > 0 && !(*map)->distances[parent->row - 1][parent->column]
-							&& (*map)->map[parent->row - 1][parent->column] != l->full)
-			{
-				tmp.row = parent->row - 1;
-				tmp.column = parent->column;
-				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-				push_back(queue, &tmp, sizeof(tmp));
-				print_coordinates(*queue);
-			}
-			if (parent->column > 0 && !(*map)->distances[parent->row][parent->column - 1]
-									&& (*map)->map[parent->row][parent->column - 1] != l->full)
-			{
-				tmp.row = parent->row;
-				tmp.column = parent->column - 1;
-				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-				push_back(queue, &tmp, sizeof(tmp));
-				print_coordinates(*queue);
-			}
-			if (parent->row < l->height - 1 && !(*map)->distances[parent->row + 1][parent->column]
-							&& (*map)->map[parent->row + 1][parent->column ] != l->full)
-			{
-				printf("y\n");
-				tmp.row = parent->row + 1;
-				tmp.column = parent->column;
-				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-				push_back(queue, &tmp, sizeof(tmp));
-				print_coordinates(*queue);
-			}
-			if (parent->column < l->width - 1&& !(*map)->distances[parent->row][parent->column + 1]
-							&& (*map)->map[parent->row][parent->column + 1] != l->full)
-			{
-				tmp.row = parent->row;
-				tmp.column = parent->column + 1;
-				write_distance(&tmp, map, l, (*map)->distances[parent->row][parent->column] + 1);
-				push_back(queue, &tmp, sizeof(tmp));
-				print_coordinates(*queue);
-			}
-//			print_matrix((*map)->distances, l->height, l->width);
-//			print_matrix((*map)->visited, l->height, l->width);
-		}
+		queue_neighbors(queue, map, l, parent);
 	}
 //	if (*queue && (*queue)->data)
 //	{
 //		check_neighbors(queue, map, l);
 //	}
 //	
-			print_matrix((*map)->distances, l->height, l->width);
-			print_matrix((*map)->visited, l->height, l->width);
+//			print_matrix((*map)->distances, l->height, l->width);
 }
 
 int				bfs(t_map **map, t_legend *legend)
@@ -422,14 +454,12 @@ int				bfs(t_map **map, t_legend *legend)
 	print_coordinate(stack->data);
 	write_distance(stack->data, map, legend, 1);
 	print_matrix((*map)->distances, legend->height, legend->width);
-	print_matrix((*map)->visited, legend->height, legend->width);
 	check_neighbors(&stack, map, legend);
 	return (1);
 }
 
 int				solve(t_map *map, t_legend *legend)
 {
-	map->visited = zero_matrix(legend->height, legend->width);
 	map->distances = zero_matrix(legend->height, legend->width);
 	if (!bfs(&map, legend))
 		return (0);

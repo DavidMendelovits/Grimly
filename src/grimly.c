@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 14:58:34 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 16:08:25 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void			read_validate_map(int fd)
 		write_error(MAP_ERROR, sizeof(MAP_ERROR));
 		return ;
 	}
-	print_legend(legend);
 	map = read_map(legend, fd);
 	if (!map)
 	{

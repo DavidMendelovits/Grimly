@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:01 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 12:57:21 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 16:07:48 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,56 @@ void			print_coordinates(t_list *queue)
 	{
 		print_coordinates(queue->next);
 	}
+}
+
+void			print_parents(int **parents, int height, int width)
+{
+	int						p;
+	int						i;
+
+	p = 0;
+	while (p < height)
+	{
+		i = 0;
+		while (i < width)
+		{
+			if (parents[p][i] == UP)
+				printf("%2c", '^');
+			else if (parents[p][i] == LEFT)
+				printf("%2c", '<');
+			else if (parents[p][i] == RIGHT)
+				printf("%2c", '>');
+			else if (parents[p][i] == DOWN)
+				printf("%2c", '|');
+			else
+				printf("%2d", 0);
+			i += 1;
+		}
+		printf("\n");
+		p += 1;
+	}
+	printf("----------------------\n");
+}
+
+void			print_2d(char **s)
+{
+	int						p;
+
+	p = 0;
+	while (s[p])
+	{
+		b_printf("%s\n", s[p]);
+		p += 1;
+	}
+}
+
+void			print_solution(char **map, int steps, t_legend *l)
+{
+	b_printf("%ix%i%c%c%c%c%c\n", l->height, l->width, l->full, l->empty, l->path, l->start, l->end);
+	print_2d(map);
+	ft_putstr("RESULT IN ");
+	ft_putnbr_base((unsigned long long)steps, 10);
+	ft_putstr(" STEPS!\n");
 }
 
 void			*write_error(char *err, size_t size)

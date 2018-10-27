@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:11:48 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 15:00:58 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 15:56:46 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,38 +94,10 @@ void			choose_path(t_coordinate **p, t_map **map)
 		new->column = tmp->column;
 	free(tmp);
 	*p = new;
+	(*map)->steps = 1;
 }
 
-void			print_parents(int **parents, int height, int width)
-{
-	int						p;
-	int						i;
-
-	p = 0;
-	while (p < height)
-	{
-		i = 0;
-		while (i < width)
-		{
-			if (parents[p][i] == UP)
-				printf("%2c", '^');
-			else if (parents[p][i] == LEFT)
-				printf("%2c", '<');
-			else if (parents[p][i] == RIGHT)
-				printf("%2c", '>');
-			else if (parents[p][i] == DOWN)
-				printf("%2c", '|');
-			else
-				printf("%2d", 0);
-			i += 1;
-		}
-		printf("\n");
-		p += 1;
-	}
-	printf("----------------------\n");
-}
-
-void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
+int			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
 	t_coordinate			*parent;
 
@@ -136,18 +108,21 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			parent = pop(queue);
 			if ((*map)->map[parent->row][parent->column] == l->end)
 			{
-				print_coordinate(parent);
-				printf("%c\n", (*map)->map[parent->row][parent->column]);
 				choose_path(&parent, map);
-				(*map)->map[parent->row][parent->column] = l->path;
-				trace_path(parent, map, l);
-				print_strings((*map)->map, 0);
-				return ;
+				if ((*map)->map[parent->row][parent->column] != l->start)
+				{
+					(*map)->map[parent->row][parent->column] = l->path;
+					trace_path(parent, map, l);
+					print_solution((*map)->map, (*map)->steps, l);
+				}
+				else
+					print_solution((*map)->map, (*map)->steps, l);
+				return (1);
 			}	
 		}
 		queue_neighbors(queue, map, l, parent);
 	}
-	write_error(MAP_ERROR, sizeof(MAP_ERROR));
+	return (0);
 }
 
 int				bfs(t_map **map, t_legend *legend)
@@ -159,6 +134,7 @@ int				bfs(t_map **map, t_legend *legend)
 	stack = NULL;
 	push(&stack, tmp->start, sizeof(tmp->start));
 	write_distance(stack->data, map, 1);
-	check_neighbors(&stack, map, legend);
-	return (1);
+	if (check_neighbors(&stack, map, legend))
+		return (1);
+	return (0);
 }

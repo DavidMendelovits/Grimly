@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 17:13:39 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:23:45 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 16:42:16 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ void			free_map(t_map *map)
 		}
 		free(map);
 	}
+}
+
+void			*terminate_object(void (*f)(void *content), void *ptr)
+{
+	if (ptr)
+		(*f)(ptr);
+	return (NULL);
 }
 
 void			free_2d(char **ptrs)

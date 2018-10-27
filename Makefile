@@ -6,7 +6,7 @@
 #    By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/26 16:22:09 by dmendelo          #+#    #+#              #
-#    Updated: 2018/10/26 17:56:37 by dmendelo         ###   ########.fr        #
+#    Updated: 2018/10/27 14:29:31 by dmendelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,13 +34,14 @@ OBJ = grimly.o \
 	  trace.o \
 	  free.o
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -I libft -I includes 
+
+VPATH = src
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): $(OBJ) 
 		@make -C libft/
-		@gcc $(CFLAGS) -c $(SRC) -I libft/ -I includes/
 		@gcc $(OBJ) libft/libft.a -o $(NAME) -g -fsanitize=address
 
 clean:

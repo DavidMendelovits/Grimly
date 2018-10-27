@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:01 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:25:25 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 12:57:21 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,10 @@ void			print_coordinates(t_list *queue)
 	{
 		print_coordinates(queue->next);
 	}
+}
+
+void			*write_error(char *err, size_t size)
+{
+	write(2, err, size);
+	return (NULL);
 }

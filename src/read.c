@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:49 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:25:54 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 14:58:45 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ t_legend		*read_first_line(int fd)
 	legend = (t_legend *)malloc(sizeof(*legend));
 	get_next_line(fd, &line);
 	p = ft_strlen(line) - 1;
-//	printf("first line = %s\n", line);
 	p = read_keys(&legend, line, p);
 	end = p;
 	while (p >= 0 && ft_is_digit(line[p]) && line[p] != 'x')
@@ -61,14 +60,17 @@ void			extract_line(t_map **map, char *line, t_legend *legend)
 	static int		p = 0;
 	int				x;
 
-	if ((x = ft_strchr_index(line, legend->start))) 
+	x = 0;
+	if (line[0] == legend->start || (x = ft_strchr_index(line, legend->start))) 
 	{
+		printf("found start\n");
 		(*map)->start = (t_coordinate *)malloc(sizeof(t_coordinate));
 		(*map)->start->row = p;
 		(*map)->start->column = x;
 	}
 	else if ((x = ft_strchr_index(line, legend->end)))
 	{
+		printf("ends + 1\n");
 		(*map)->ends += 1;
 	}
 	(*map)->map[p] = ft_strdup(line);

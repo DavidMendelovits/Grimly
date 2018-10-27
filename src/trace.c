@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:14:21 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:47:18 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 18:02:12 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int				is_better_path(int **matrix, t_coordinate *path, t_coordinate *tmp, int d
 {
 	t_coordinate			*new;
 
+	print_coordinate(tmp);
 	new = malloc(sizeof(*new));
 	if (dir == UP)
 		printf("up\n");
@@ -56,18 +57,23 @@ void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
 
 	path = end;
 	tmp = malloc(sizeof(*tmp));
+	write_coordinate(&tmp, path->row, path->column);
 	while ((*map)->map[path->row][path->column] != legend->start)
 	{
 		if (is_inbounds(path->row, path->column, legend))
 		{
 			if (path->row > 0 && (*map)->distances[path->row - 1][path->column] > 0)
 				write_coordinate(&tmp, path->row - 1, path->column);
+	print_coordinate(tmp);
 			if (path->column > 0 && is_better_path((*map)->distances, path, tmp, LEFT))
 				write_coordinate(&tmp, path->row, path->column - 1);
+	print_coordinate(tmp);
 			if (path->column < legend->width - 1 && is_better_path((*map)->distances, path, tmp, RIGHT))
 				write_coordinate(&tmp, path->row, path->column + 1);
+	print_coordinate(tmp);
 			if (path->row < legend->height - 1 && is_better_path((*map)->distances, path, tmp, DOWN)) 
 				write_coordinate(&tmp, path->row + 1, path->column);
+	print_coordinate(tmp);
 		}
 		free(path);
 		path = malloc(sizeof(t_coordinate));

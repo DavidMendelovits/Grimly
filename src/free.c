@@ -1,42 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix.c                                           :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/26 16:17:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:25:19 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/10/26 17:13:39 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/10/26 17:23:45 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "grimly.h"
 
-void			write_distance(t_coordinate *point, t_map **map, int i)
+void			free_map(t_map *map)
 {
-	(*map)->distances[point->row][point->column] = i;
+	if (map)
+	{
+		if (map->map)
+		{
+			free_2d(map->map);
+		}
+//		if (map->distances)
+//		{
+//			free_matrix(map->distances)
+//		}
+		if (map->start)
+		{
+			free(map->start);
+		}
+		free(map);
+	}
 }
 
-int				**zero_matrix(int height, int width)
+void			free_2d(char **ptrs)
 {
-	int				**matrix;
 	int				p;
-	int				x;
 
 	p = 0;
-	matrix = (int **)malloc(sizeof(int *) * (height));
-	while (p < height)
+	while (ptrs[p])
 	{
-		matrix[p] = (int *)malloc(sizeof(int) * (width));
-		x = 0;
-		while (x < width)
-		{
-			matrix[p][x] = 0;
-			x += 1;
-		}
+		free(ptrs[p]);
 		p += 1;
 	}
-//	print_matrix(matrix, height, width);
-	return (matrix);
+	free(ptrs);
 }
-

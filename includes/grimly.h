@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:41:40 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:53:40 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:18:18 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ typedef struct s_list
 typedef struct	s_map
 {
 	char			**map;
-	int				**visited;
 	int				**distances;
 	t_coordinate	*start;
-	t_list			*end;
+	int				ends;
 }				t_map;
 
 typedef enum
@@ -90,3 +89,5 @@ int				atoi_range(char *s, int begin, int end);
 int				read_keys(t_legend **legend, char *line, int p);
 void			print_strings(char **strings, int p);
 void			print_legend(t_legend *legend);
+void			free_2d(char **ptrs);
+void			free_map(t_map *map);

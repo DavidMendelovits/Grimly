@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:22:50 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:25:08 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void			read_validate_map(int fd)
 	legend = read_first_line(fd);
 	if (!legend)
 		return ;
-	print_legend(legend);
+//	print_legend(legend);
 	map = read_map(legend, fd);
 	if (!map)
 		return ;
-	print_strings(map->map, 0);	
+//	print_strings(map->map, 0);	
 	if (!solve(map, legend))
 	{
 		printf("error\n");

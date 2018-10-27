@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:11:48 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:57:20 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:28:37 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,8 @@
 
 t_coordinate			write_neighbor(t_coordinate *parent, t_map **map, int dir)
 {
-	WOW();
 	t_coordinate			tmp;
 
-	if (dir == UP)
-		printf("up\n");
-	if (dir == DOWN)
-		printf("down\n");
-	if (dir == LEFT)
-		printf("left\n");
-	if (dir == RIGHT)
-		printf("right\n");
 	if (dir == UP || dir == DOWN)
 		tmp.row = (dir == UP) ? parent->row - 1 : parent->row + 1;
 	else
@@ -40,7 +31,6 @@ t_coordinate			write_neighbor(t_coordinate *parent, t_map **map, int dir)
 
 void			queue_neighbors(t_list **queue, t_map **map, t_legend *l, t_coordinate *p)
 {
-	WOW();
 	t_coordinate			tmp;
 
 	if (is_inbounds(p->row, p->column, l))
@@ -70,7 +60,6 @@ void			queue_neighbors(t_list **queue, t_map **map, t_legend *l, t_coordinate *p
 
 void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
-	WOW();
 	t_coordinate			*parent;
 
 	while (*queue)
@@ -80,14 +69,14 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			parent = pop(queue);
 			if ((*map)->map[parent->row][parent->column] == l->end)
 			{
-				print_matrix((*map)->distances, l->height, l->width);
 				trace_path(parent, map, l);
 				print_strings((*map)->map, 0);
-				break ;
+				return ;
 			}	
 		}
 		queue_neighbors(queue, map, l, parent);
 	}
+	printf("error\n");
 }
 
 int				bfs(t_map **map, t_legend *legend)
@@ -98,9 +87,7 @@ int				bfs(t_map **map, t_legend *legend)
 	tmp = *map;
 	stack = NULL;
 	push(&stack, tmp->start, sizeof(tmp->start));
-	print_coordinate(stack->data);
 	write_distance(stack->data, map, 1);
-	print_matrix((*map)->distances, legend->height, legend->width);
 	check_neighbors(&stack, map, legend);
 	return (1);
 }

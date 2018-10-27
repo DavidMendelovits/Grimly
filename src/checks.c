@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:15:18 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:51:39 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:24:49 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int				validate_line(char *line, t_legend *legend)
 	p = -1;
 	while (line[++p])
 	{
-	//	printf("|%c|\n", line[p]);
 		if (line[p] == legend->full || line[p] == legend->empty
 		|| line[p] == legend->start || line[p] == legend->end)
 		{

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:49 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:11:16 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:25:54 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_legend		*read_first_line(int fd)
 	legend = (t_legend *)malloc(sizeof(*legend));
 	get_next_line(fd, &line);
 	p = ft_strlen(line) - 1;
-	printf("first line = %s\n", line);
+//	printf("first line = %s\n", line);
 	p = read_keys(&legend, line, p);
 	end = p;
 	while (p >= 0 && ft_is_digit(line[p]) && line[p] != 'x')
@@ -52,7 +52,6 @@ t_legend		*read_first_line(int fd)
 		return (NULL);
 	}
 	legend->height = atoi_range(line, p, end);
-	printf("height = %d\n", legend->height);
 	free(line);
 	return (legend);
 }
@@ -67,10 +66,12 @@ void			extract_line(t_map **map, char *line, t_legend *legend)
 		(*map)->start = (t_coordinate *)malloc(sizeof(t_coordinate));
 		(*map)->start->row = p;
 		(*map)->start->column = x;
-		printf("start at [%d][%d]\n", (*map)->start->row, (*map)->start->column);
+	}
+	else if ((x = ft_strchr_index(line, legend->end)))
+	{
+		(*map)->ends += 1;
 	}
 	(*map)->map[p] = ft_strdup(line);
-	printf("extracted: %s\n", (*map)->map[p]);
 	p += 1;
 }
 
@@ -83,22 +84,25 @@ t_map			*read_map(t_legend *legend, int fd)
 	lines = 0;
 	map = (t_map *)malloc(sizeof(*map));
 	map->map = (char **)malloc(sizeof(char *) * (legend->height + 1));
+	map->start = NULL;
+	map->ends = 0;
 	while (get_next_line(fd, &line) == 1 && lines < legend->height)
 	{
-		printf("len = %d\n", ft_strlen(line));
-		printf("width = %u\n", legend->width);
 		if (!validate_line(line, legend))
 		{
-			printf("noooo\n");
-			free(map);
+			free_map(map);
 			return (NULL);
 		}
 		extract_line(&map, line, legend);
 		lines += 1;
-		printf("line num = %d\n", lines);
 		free(line);
 		line = NULL;
 	}
 	map->map[lines] = NULL;
+	if (!map->start || !map->ends)
+	{
+		free_map(map);
+		return (NULL);
+	}
 	return (map);
 }

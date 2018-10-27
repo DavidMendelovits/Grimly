@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:16:49 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:17:31 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:28:54 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void			push(t_list **head, void *new_data, size_t size)
 {
-	WOW();
 	t_list			*new;
 
 	new = (t_list *)malloc(sizeof(*new));
@@ -23,12 +22,10 @@ void			push(t_list **head, void *new_data, size_t size)
 	new->size = size;
 	if (!(*head))
 	{
-		printf("2\n");
 		new->next = NULL;
 	}
 	else
 	{
-		printf("1\n");
 		new->next = *head;
 	}
 	*head = new;

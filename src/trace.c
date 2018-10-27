@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:14:21 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 16:14:25 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:26:18 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void			write_coordinate(t_coordinate **point, int row, int column)
 
 void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
 {
-	WOW();
 	t_coordinate			*path;
 	t_coordinate			*tmp;
 

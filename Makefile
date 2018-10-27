@@ -6,7 +6,7 @@
 #    By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/26 16:22:09 by dmendelo          #+#    #+#              #
-#    Updated: 2018/10/26 16:54:42 by dmendelo         ###   ########.fr        #
+#    Updated: 2018/10/26 17:34:42 by dmendelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC = src/grimly.c \
 	  src/queue.c \
 	  src/read.c \
 	  src/trace.c \
+	  src/free.c \
 
 OBJ = grimly.o \
 	  bfs.o \
@@ -31,8 +32,9 @@ OBJ = grimly.o \
 	  queue.o \
 	  read.o \
 	  trace.o \
+	  free.o
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=adress
 
 all: $(NAME)
 

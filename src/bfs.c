@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:11:48 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:28:37 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:41:38 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 			parent = pop(queue);
 			if ((*map)->map[parent->row][parent->column] == l->end)
 			{
+				print_coordinate(parent);
+				printf("%c\n", (*map)->map[parent->row][parent->column]);
 				trace_path(parent, map, l);
 				print_strings((*map)->map, 0);
 				return ;

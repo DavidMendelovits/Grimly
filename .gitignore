@@ -2,3 +2,6 @@
 *.o
 *.swp
 *.swo
+.DS*
+._.DS*
+.nfs*

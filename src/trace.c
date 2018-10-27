@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:14:21 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 17:26:18 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:47:18 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@ int				is_better_path(int **matrix, t_coordinate *path, t_coordinate *tmp, int d
 	t_coordinate			*new;
 
 	new = malloc(sizeof(*new));
+	if (dir == UP)
+		printf("up\n");
+	if (dir == DOWN)
+		printf("down\n");
+	if (dir == RIGHT)
+		printf("right\n");
+	if (dir == LEFT)
+		printf("left\n");
 	if (dir == UP || dir == DOWN)
 		new->row = (dir == UP) ? path->row - 1 : path->row + 1;
 	else

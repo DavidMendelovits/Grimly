@@ -15,7 +15,6 @@ void            *ft_memalloc(size_t size);
 void            ft_bzero(void *s, size_t n);
 int             ft_atoi(const char *str);
 int             ft_strlen(const char *str);
-int             b_printf(const char *format, ...);
 char            *ft_strdup(const char *str);
 char            *ft_strdup_range(const char *str, int begin, int end);
 char			*ft_strrev(char *str);

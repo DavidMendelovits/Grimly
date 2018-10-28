@@ -6,7 +6,7 @@
 #    By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/22 18:55:29 by dmendelo          #+#    #+#              #
-#    Updated: 2018/10/24 18:40:43 by dmendelo         ###   ########.fr        #
+#    Updated: 2018/10/27 21:49:50 by dmendelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,24 +26,20 @@ OBJ = ft_atoi.o ft_bzero.o ft_memset.o ft_putchar.o ft_putnbr_base.o \
 		ft_strrev.o ft_swap.o ft_atoi_base.o ft_strcmp.o ft_is_digit.o \
 		ft_strcpy.o ft_strnew.o ft_strjoin.o ft_itoa_base.o ft_utoa_base.o \
 		ft_strsplit.o ft_print_strings.o ft_strstr_index.o ft_strchr_index.o \
-		trip_join.o ft_memcpy.o ft_memcpy.o
-
-B_PRINTF = b_printf/b_printf.c b_printf/specifiers1.c b_printf/specifiers2.c
+		trip_join.o ft_memcpy.o ft_memdel.o
 
 GNL = gnl/get_next_line.c
-
-B_PRINTF_OBJ = b_printf.o specifiers1.o specifiers2.o
 
 GNL_OBJ = get_next_line.o
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@gcc $(CFLAGS) -c $(SRC) $(B_PRINTF) $(GNL) -I $(NAME)
-	@ar rcs $(NAME) $(OBJ) $(B_PRINTF_OBJ) $(GNL_OBJ)
+	@gcc $(CFLAGS) -c $(SRC) $(GNL) -I $(NAME)
+	@ar rcs $(NAME) $(OBJ) $(GNL_OBJ)
 
 clean:
-	@rm -rf $(OBJ) $(B_PRINTF_OBJ)
+	@rm -rf $(OBJ) $(GNL_OBJ)
 
 fclean: clean
 	@rm -f $(NAME)

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:41:40 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:50:49 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:42:20 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ typedef struct	s_legend
 	int				width;
 }				t_legend;
 
-typedef struct	s_coordinate
+typedef struct	s_point
 {
 	int				row;
 	int				column;
-}				t_coordinate;
+}				t_point;
 
 typedef struct	s_list
 {
@@ -53,7 +53,7 @@ typedef struct	s_map
 	char			**map;
 	int				**distances;
 	int				**parents;
-	t_coordinate	*start;
+	t_point			*start;
 	int				ends;
 	int				steps;
 }				t_map;
@@ -73,20 +73,22 @@ void			read_file(char *filename);
 void			read_vallidate_map(int fd);
 int				solve(t_map *map, t_legend *legend);
 int				bfs(t_map **map, t_legend *legend);
-int				check_neighbrs(t_list **queue, t_map **map, t_legend *l);
-void			queue_neighbors(t_list **queue, t_map **map, t_legend *l, t_coordinate *p);
-t_coordinate	write_neighbor(t_coordinate *parent, t_map **map, int dir);
+int				check_neighbors(t_list **queue, t_map **map, t_legend *l);
+int				is_valid_tile(int row, int column, t_legend *l, t_map **map);
+void			q_neighbors(t_list **q, t_map **m, t_legend *l, t_point *p);
+t_point			write_neighbor(t_point *p, t_map **map, int dir);
 int				is_empty(int row, int column, t_map **map, t_legend *l);
-void			trace_path(t_coordinate *end, t_map **map, t_legend *legend);
-void			write_coordinate(t_coordinate **point, int row, int column);
-int				is_better_path(int **matrix, t_coordinate *path, t_coordinate *tmp, int dir);
+void			trace_path(t_point *end, t_map **map, t_legend *legend);
+void			get_best_path(t_point **tmp, t_point *p, int **d, t_legend *l);
+void			write_coordinate(t_point **point, int row, int column);
+int				is_better_path(int **matrix, t_point *p, t_point *tmp, int dir);
 int				is_inbounds(int row, int column, t_legend *l);
 void			*pop(t_list **head);
-void			print_coordinates(t_list *queue);
-void			write_distance(t_coordinate *point, t_map **map, int i);
+void			print_points(t_list *queue);
+void			write_distance(t_point *point, t_map **map, int i);
 void			push_back(t_list **head, void *new_data, size_t size);
 void			push(t_list **head, void *new_data, size_t size);
-void			print_coordinate(t_coordinate *point);
+void			print_point(t_point *point);
 int				**zero_matrix(int height, int width);
 void			print_matrix(int **matrix, int height, int width);
 t_map			*read_map(t_legend *legend, int fd);

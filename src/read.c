@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:49 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:46:53 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:27:31 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void			extract_line(t_map **map, char *line, t_legend *legend)
 	int				x;
 
 	x = 0;
-	if (line[0] == legend->start || (x = ft_strchr_index(line, legend->start))) 
+	if (line[0] == legend->start || (x = ft_strchr_index(line, legend->start)))
 	{
-		(*map)->start = (t_coordinate *)malloc(sizeof(t_coordinate));
+		(*map)->start = (t_point *)malloc(sizeof(t_point));
 		(*map)->start->row = p;
 		(*map)->start->column = x;
 	}
@@ -70,7 +70,6 @@ void			extract_line(t_map **map, char *line, t_legend *legend)
 	(*map)->map[p] = ft_strdup(line);
 	p += 1;
 }
-
 
 t_map			*read_map(t_legend *legend, int fd)
 {

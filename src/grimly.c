@@ -6,11 +6,25 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 13:51:31 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:08:25 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:21:09 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "grimly.h"
+
+int				bfs(t_map **map, t_legend *legend)
+{
+	t_map			*tmp;
+	t_list			*stack;
+
+	tmp = *map;
+	stack = NULL;
+	push(&stack, tmp->start, sizeof(tmp->start));
+	write_distance(stack->data, map, 1);
+	if (check_neighbors(&stack, map, legend))
+		return (1);
+	return (0);
+}
 
 int				solve(t_map *map, t_legend *legend)
 {
@@ -48,7 +62,7 @@ void			read_validate_map(int fd)
 void			read_file(char *filename)
 {
 	int				fd;
-	
+
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
@@ -59,7 +73,7 @@ void			read_file(char *filename)
 	close(fd);
 }
 
-int			main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	int				i;
 

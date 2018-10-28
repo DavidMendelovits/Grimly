@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:08:01 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:07:48 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:26:02 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,22 @@ void			print_strings(char **strings, int p)
 	}
 }
 
-void			print_coordinate(t_coordinate *point)
+void			print_point(t_point *point)
 {
 	printf("[%d]", point->row);
 	printf("[%d]\n", point->column);
 }
 
-void			print_coordinates(t_list *queue)
+void			print_points(t_list *queue)
 {
 	WOW();
 	if (queue && queue->data)
 	{
-		print_coordinate(queue->data);
+		print_point(queue->data);
 	}
 	if (queue->next)
 	{
-		print_coordinates(queue->next);
+		print_points(queue->next);
 	}
 }
 
@@ -118,7 +118,15 @@ void			print_2d(char **s)
 
 void			print_solution(char **map, int steps, t_legend *l)
 {
-	b_printf("%ix%i%c%c%c%c%c\n", l->height, l->width, l->full, l->empty, l->path, l->start, l->end);
+	ft_putnbr_base((unsigned long long)l->height, 10);
+	ft_putchar('x');
+	ft_putnbr_base((unsigned long long)l->width, 10);
+	ft_putchar(l->full);
+	ft_putchar(l->empty);
+	ft_putchar(l->path);
+	ft_putchar(l->start);
+	ft_putchar(l->end);
+	write(1, "\n", 1);
 	print_2d(map);
 	ft_putstr("RESULT IN ");
 	ft_putnbr_base((unsigned long long)steps, 10);

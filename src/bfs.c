@@ -6,13 +6,13 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:11:48 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 15:56:46 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:19:52 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "grimly.h"
 
-void			write_parent(t_coordinate *child, t_map **map, int dir)
+void			write_parent(t_point *child, t_map **map, int dir)
 {
 	if (dir == UP)
 		(*map)->parents[child->row][child->column] = DOWN;
@@ -24,59 +24,55 @@ void			write_parent(t_coordinate *child, t_map **map, int dir)
 		(*map)->parents[child->row][child->column] = UP;
 }
 
-t_coordinate	write_neighbor(t_coordinate *parent, t_map **map, int dir)
+t_point			write_neighbor(t_point *p, t_map **map, int dir)
 {
-	t_coordinate			tmp;
+	t_point			tmp;
 
 	if (dir == UP || dir == DOWN)
-		tmp.row = (dir == UP) ? parent->row - 1 : parent->row + 1;
+		tmp.row = (dir == UP) ? p->row - 1 : p->row + 1;
 	else
-		tmp.row = parent->row;
+		tmp.row = p->row;
 	if (dir == LEFT || dir == RIGHT)
-		tmp.column = (dir == LEFT) ? parent->column - 1 : parent->column + 1;
+		tmp.column = (dir == LEFT) ? p->column - 1 : p->column + 1;
 	else
-		tmp.column = parent->column;
+		tmp.column = p->column;
 	write_parent(&tmp, map, dir);
-	write_distance(&tmp, map, (*map)->distances[parent->row][parent->column] + 1);
+	write_distance(&tmp, map, (*map)->distances[p->row][p->column] + 1);
 	return (tmp);
 }
 
-
-void			queue_neighbors(t_list **queue, t_map **map, t_legend *l, t_coordinate *p)
+void			q_neighbors(t_list **q, t_map **m, t_legend *l, t_point *p)
 {
-	t_coordinate			tmp;
+	t_point			tmp;
 
-	if (is_inbounds(p->row, p->column, l))
+	if (is_valid_tile(p->row - 1, p->column, l, m))
 	{
-		if (is_inbounds(p->row - 1, p->column, l) && is_empty(p->row - 1, p->column, map, l))
-		{
-			tmp = write_neighbor(p, map, UP);
-			push_back(queue, &tmp, sizeof(tmp));
-		}
-		if (is_inbounds(p->row, p->column - 1, l) && is_empty(p->row, p->column - 1, map, l))
-		{
-			tmp = write_neighbor(p, map, LEFT);
-			push_back(queue, &tmp, sizeof(tmp));
-		}
-		if (is_inbounds(p->row + 1, p->column, l) && is_empty(p->row + 1, p->column, map, l))
-		{
-			tmp = write_neighbor(p, map, DOWN);
-			push_back(queue, &tmp, sizeof(tmp));
-		}
-		if (is_inbounds(p->row, p->column + 1, l) && is_empty(p->row, p->column + 1, map, l))
-		{
-			tmp = write_neighbor(p, map, RIGHT);
-			push_back(queue, &tmp, sizeof(tmp));
-		}
+		tmp = write_neighbor(p, m, UP);
+		push_back(q, &tmp, sizeof(tmp));
+	}
+	if (is_valid_tile(p->row, p->column - 1, l, m))
+	{
+		tmp = write_neighbor(p, m, LEFT);
+		push_back(q, &tmp, sizeof(tmp));
+	}
+	if (is_valid_tile(p->row + 1, p->column, l, m))
+	{
+		tmp = write_neighbor(p, m, DOWN);
+		push_back(q, &tmp, sizeof(tmp));
+	}
+	if (is_valid_tile(p->row, p->column + 1, l, m))
+	{
+		tmp = write_neighbor(p, m, RIGHT);
+		push_back(q, &tmp, sizeof(tmp));
 	}
 }
 
-void			choose_path(t_coordinate **p, t_map **map)
+void			choose_path(t_point **p, t_map **map)
 {
-	t_coordinate			*tmp;
-	t_coordinate			*new;
+	t_point			*tmp;
+	t_point			*new;
 
-	new = (t_coordinate *)malloc(sizeof(*new));
+	new = (t_point *)malloc(sizeof(*new));
 	tmp = *p;
 	if ((*map)->parents[tmp->row][tmp->column] == UP
 	|| (*map)->parents[tmp->row][tmp->column] == DOWN)
@@ -97,9 +93,9 @@ void			choose_path(t_coordinate **p, t_map **map)
 	(*map)->steps = 1;
 }
 
-int			check_neighbors(t_list **queue, t_map **map, t_legend *l)
+int				check_neighbors(t_list **queue, t_map **map, t_legend *l)
 {
-	t_coordinate			*parent;
+	t_point			*parent;
 
 	while (*queue)
 	{
@@ -118,23 +114,10 @@ int			check_neighbors(t_list **queue, t_map **map, t_legend *l)
 				else
 					print_solution((*map)->map, (*map)->steps, l);
 				return (1);
-			}	
+			}
 		}
-		queue_neighbors(queue, map, l, parent);
+		if (is_inbounds(parent->row, parent->column, l))
+			q_neighbors(queue, map, l, parent);
 	}
-	return (0);
-}
-
-int				bfs(t_map **map, t_legend *legend)
-{
-	t_map			*tmp;
-	t_list			*stack;
-
-	tmp = *map;
-	stack = NULL;
-	push(&stack, tmp->start, sizeof(tmp->start));
-	write_distance(stack->data, map, 1);
-	if (check_neighbors(&stack, map, legend))
-		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 17:13:39 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:42:16 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:20:17 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ void			free_map(t_map *map)
 		{
 			free_2d(map->map);
 		}
-//		if (map->distances)
-//		{
-//			free_matrix(map->distances)
-//		}
 		if (map->start)
 		{
 			free(map->start);

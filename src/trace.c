@@ -6,25 +6,25 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:14:21 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/27 16:51:26 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:42:53 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "grimly.h"
 
-int				is_better_path(int **matrix, t_coordinate *path, t_coordinate *tmp, int dir)
+int				is_better_path(int **matrix, t_point *p, t_point *tmp, int dir)
 {
-	t_coordinate			*new;
+	t_point			*new;
 
 	new = malloc(sizeof(*new));
 	if (dir == UP || dir == DOWN)
-		new->row = (dir == UP) ? path->row - 1 : path->row + 1;
+		new->row = (dir == UP) ? p->row - 1 : p->row + 1;
 	else
-		new->row = path->row;
+		new->row = p->row;
 	if (dir == LEFT || dir == RIGHT)
-		new->column = (dir == LEFT) ? path->column - 1 : path->column + 1;
+		new->column = (dir == LEFT) ? p->column - 1 : p->column + 1;
 	else
-		new->column = path->column;
+		new->column = p->column;
 	if (matrix[new->row][new->column]
 	&& matrix[new->row][new->column] < matrix[tmp->row][tmp->column])
 	{
@@ -35,16 +35,28 @@ int				is_better_path(int **matrix, t_coordinate *path, t_coordinate *tmp, int d
 	return (0);
 }
 
-void			write_coordinate(t_coordinate **point, int row, int column)
+void			write_coordinate(t_point **point, int row, int column)
 {
 	(*point)->row = row;
 	(*point)->column = column;
 }
 
-void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
+void			get_best_path(t_point **tmp, t_point *p, int **d, t_legend *l)
 {
-	t_coordinate			*path;
-	t_coordinate			*tmp;
+	if (p->row > 0 && d[p->row - 1][p->column] > 0)
+		write_coordinate(tmp, p->row - 1, p->column);
+	if (p->column > 0 && is_better_path(d, p, *tmp, LEFT))
+		write_coordinate(tmp, p->row, p->column - 1);
+	if (p->column < l->width - 1 && is_better_path(d, p, *tmp, RIGHT))
+		write_coordinate(tmp, p->row, p->column + 1);
+	if (p->row < l->height - 1 && is_better_path(d, p, *tmp, DOWN))
+		write_coordinate(tmp, p->row + 1, p->column);
+}
+
+void			trace_path(t_point *end, t_map **map, t_legend *legend)
+{
+	t_point			*path;
+	t_point			*tmp;
 
 	path = end;
 	tmp = malloc(sizeof(*tmp));
@@ -52,18 +64,9 @@ void			trace_path(t_coordinate *end, t_map **map, t_legend *legend)
 	while ((*map)->map[path->row][path->column] != legend->start)
 	{
 		if (is_inbounds(path->row, path->column, legend))
-		{
-			if (path->row > 0 && (*map)->distances[path->row - 1][path->column] > 0)
-				write_coordinate(&tmp, path->row - 1, path->column);
-			if (path->column > 0 && is_better_path((*map)->distances, path, tmp, LEFT))
-				write_coordinate(&tmp, path->row, path->column - 1);
-			if (path->column < legend->width - 1 && is_better_path((*map)->distances, path, tmp, RIGHT))
-				write_coordinate(&tmp, path->row, path->column + 1);
-			if (path->row < legend->height - 1 && is_better_path((*map)->distances, path, tmp, DOWN)) 
-				write_coordinate(&tmp, path->row + 1, path->column);
-		}
+			get_best_path(&tmp, path, (*map)->distances, legend);
 		free(path);
-		path = malloc(sizeof(t_coordinate));
+		path = malloc(sizeof(t_point));
 		ft_memcpy(path, tmp, sizeof(tmp));
 		if ((*map)->map[path->row][path->column] != legend->start)
 		{
